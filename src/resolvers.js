@@ -8,15 +8,11 @@ export const resolvers = {
     Query: {
         getUsers: async () => await User.find({}).exec(),
         getShopList: async () => await Product.find({}).exec(),
-        isAuthenticated: async (_, __, { req, res }) => {
-            if (!req.userId) return null;
-            try{
+        isAuthenticated: async (_, __, { req }) => {
+            if (!req.userId) return false;
             const user = await User.findById(req.userId).exec();
-            res.isAuthenticated = user?true:false;
-            return user;
-            }catch(e){
-                console.log(e.message)
-            }
+            if (!user) return false;
+            return true;
         }
     },
     Mutation: {
