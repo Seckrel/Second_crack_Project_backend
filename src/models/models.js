@@ -2,10 +2,8 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    profile_id: String,
-    first_name: String,
-    last_name: String,
-    dp: String
+    userName: String,
+    password: String
 });
 
 const User = mongoose.model('user', userSchema);
