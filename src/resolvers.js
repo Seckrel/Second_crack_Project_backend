@@ -2,6 +2,7 @@ require('dotenv').config();
 import { User, Product } from './models/models';
 import hash from 'object-hash';
 import { sign } from 'jsonwebtoken';
+import { createTokens } from './auth';
 
 export const resolvers = {
     Query: {
@@ -42,20 +43,30 @@ export const resolvers = {
                 const checkPassword = hash(password) === user.password;
                 
                 if (!checkPassword) return null;
-                const accessToken = sign({ userId: user._id}, process.env.ACCESS_TOKEN, {
-                    expiresIn: '1min'
-                })
-                const refreshToten = sign({ userId: user._id }, process.env.REFRESH_TOKEN, {
-                    expiresIn: '7d'
-                })
+                // const accessToken = sign({ userId: user._id}, process.env.ACCESS_TOKEN, {
+                //     expiresIn: '1min'
+                // })
+                // const refreshToten = sign({ userId: user._id }, process.env.REFRESH_TOKEN, {
+                //     expiresIn: '7d'
+                // })
 
-                res.cookie('access-token', accessToken);
-                res.cookie('refresh-token', refreshToten);
+                const { refreshToken, accessToken } = createTokens(user)
+                res.cookie('access-token', accessToken, { maxAge: 60 * 1000, httpOnly: true });
+                res.cookie('refresh-token', refreshToken, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true });
                 return user;
-
             }catch (err){
                 console.log(err);
             }
+        },
+        invalidateToken: async (_, __, { req, res }) => {
+            if (!req.userId) return false;
+            const user = await User.findById(req.userId);
+            if (!user) return false;
+            user.count += 1;
+            await user.save();
+            res.clearCookie('access-token');
+            res.clearCookie('refresh-token');
+            return true;
         }
     }
 };

@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
     userName: String,
-    password: String
+    password: String,
+    count: {type: Number, default: 0}
 });
 
 const User = mongoose.model('user', userSchema);

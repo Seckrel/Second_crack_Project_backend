@@ -5,6 +5,7 @@ import { resolvers } from './resolvers'
 import cookieParser from 'cookie-parser';
 import { verify, sign } from 'jsonwebtoken'; 
 import { User } from './models/models';
+import { createTokens } from './auth';
 require('dotenv').config()
 
 
@@ -25,7 +26,7 @@ const startServer = async () => {
     app.use(async (req, res, next) => {
         const accessToken = req.cookies['access-token'];
         const refreshToken = req.cookies['refresh-token'];
-        if (accessToken && refreshToken){
+        if (refreshToken){
             try{
             const data = verify(accessToken, process.env.ACCESS_TOKEN)
             req.userId = data.userId
@@ -34,16 +35,13 @@ const startServer = async () => {
                 console.log("line 33 @ index.js:", e.message)
             }
             if (!refreshToken) return next();
-            
+            console.log("here")
             try{
                 const data = verify(refreshToken, process.env.REFRESH_TOKEN);
-                console.log("data", data)
                 const user = await User.findById(data.userId);
-                if(!user) return next();
-                const NewAccessToken = sign({ userId: user._id}, process.env.ACCESS_TOKEN, {
-                    expiresIn: '1min'
-                })
-                res.cookie('access-token', NewAccessToken);
+                if(!user || user.count !== data.count) return next();
+                const tokens = createTokens(user);
+                res.cookie('access-token', tokens.accessToken, { maxAge: 60 * 1000, httpOnly: true });
             }catch(e){
                 console.log("line 46 @ index.js:",e.message)
                 return next();

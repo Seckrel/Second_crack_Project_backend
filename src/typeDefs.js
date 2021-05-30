@@ -5,6 +5,7 @@ type User {
     id: ID!
     userName: String
     password: String
+    count: String
 }
 
 type ShopList {
@@ -21,7 +22,8 @@ type Query {
 }
 type Mutation {
     addUser(userName: String!, password: String!): User,
-    loginUser(userName: String!, password: String!): User
+    loginUser(userName: String!, password: String!): User,
+    invalidateToken: Boolean!
 }
 `;
 
