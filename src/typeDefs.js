@@ -17,9 +17,11 @@ type ShopList {
 type Query {
     getUsers: [User]
     getShopList: [ShopList]
+    isAuthenticated: User
 }
 type Mutation {
-    addUser(userName: String!, password: String!): User
+    addUser(userName: String!, password: String!): User,
+    loginUser(userName: String!, password: String!): User
 }
 `;
 
