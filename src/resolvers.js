@@ -1,7 +1,6 @@
 require('dotenv').config();
-import { User, Product } from './models/models';
+import { User, Product, Reviews } from './models/models';
 import hash from 'object-hash';
-import { sign } from 'jsonwebtoken';
 import { createTokens } from './auth';
 
 export const resolvers = {
@@ -13,7 +12,15 @@ export const resolvers = {
             const user = await User.findById(req.userId).exec();
             if (!user) return false;
             return true;
-        }
+        },
+        getProductDetail: async (_, { productId }) => {
+            console.log(productId)
+            const product = await Product.findById(productId).populate({
+                path: '_reviewId',
+            })
+            console.log(product)
+            return product
+        },
     },
     Mutation: {
         addUser: async (_, args) => {
@@ -39,12 +46,6 @@ export const resolvers = {
                 const checkPassword = hash(password) === user.password;
                 
                 if (!checkPassword) return null;
-                // const accessToken = sign({ userId: user._id}, process.env.ACCESS_TOKEN, {
-                //     expiresIn: '1min'
-                // })
-                // const refreshToten = sign({ userId: user._id }, process.env.REFRESH_TOKEN, {
-                //     expiresIn: '7d'
-                // })
 
                 const { refreshToken, accessToken } = createTokens(user)
                 res.cookie('access-token', accessToken, { maxAge: 60 * 1000, httpOnly: true });
@@ -63,6 +64,21 @@ export const resolvers = {
             res.clearCookie('access-token');
             res.clearCookie('refresh-token');
             return true;
+        },
+        addReview: async (_, { review, productId, stars }) => {
+            try {
+                const response = await Reviews.create({review: review, _productId: productId, stars: stars });
+                Product.findByIdAndUpdate(
+                    productId,
+                    {runValidators: true},
+                    (err, doc) => {
+                        if (err) throw new Error(err);
+                        doc._reviewId.push(response._id)
+                        doc.save()
+                    }
+                )
+                return response;
+            }catch(e) {console.log(e.message)}
         }
     }
 };
