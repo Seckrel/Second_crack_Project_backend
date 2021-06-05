@@ -1,11 +1,47 @@
 import { gql } from 'apollo-server-express';
 
 export const typeDefs  = gql`
-type User {
-    id: ID!
+
+type GetUserInfo {
     userName: String
-    password: String
-    count: String
+    firstName: String
+    lastName: String
+    phnNumber: Int
+    error: String
+}
+type Detail {
+    _id: ID!
+    name: String
+    price: String
+    src: String
+    _reviewId: [Reviews]
+}
+
+type Reviews {
+    _id: ID!
+    review: String
+    createdAt: String
+    updatedAt: String
+    stars: Int
+    _userId: User
+    editable: Boolean
+    error: String
+}
+
+type User {
+    userName: String,
+}
+
+type LoginUser {
+    flag: Boolean!
+    msg: String
+    error: String
+}
+
+type NewUser {
+    flag: Boolean!
+    msg: String
+    error: String
 }
 
 type ShopList {
@@ -13,34 +49,26 @@ type ShopList {
     name: String
     price: String
     src: String
+    quantity: Int
 }
 
-type Reviews {
-    id: ID!
-    review: String
-    createdAt: String
-    updatedAt: String
-    stars: Int
+type LogOut {
+    flag: Boolean!
+    error: String
 }
 
-type detail {
-    id: ID!
-    name: String
-    price: String
-    src: String
-    _reviewId: [Reviews]
-}
+
 type Query {
-    getUsers: [User]
+    getUsers: GetUserInfo
     getShopList: [ShopList]
-    getProductDetail(productId: String!): detail
+    getProductDetail(productId: String!): Detail
     isAuthenticated: Boolean!
 }
 type Mutation {
-    addUser(userName: String!, password: String!): User,
-    loginUser(userName: String!, password: String!): User,
-    invalidateToken: Boolean!,
-    addReview(review: String!, productId: String!, stars: Int): Reviews
+    addUser(userName: String!, password: String!, firstName: String, lastName: String, phnNumber: Int): NewUser,
+    loginUser(userName: String!, password: String!): LoginUser,
+    invalidateToken: LogOut,
+    addReview(review: String!, productId: String!, stars: Int, reviewId: String): Reviews
 }
 `;
 

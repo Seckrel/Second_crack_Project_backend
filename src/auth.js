@@ -1,5 +1,4 @@
 import { sign } from 'jsonwebtoken';
-// import { User } from './models/models'
 require('dotenv').config();
 
 export const createTokens = (user) => {
