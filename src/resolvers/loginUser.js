@@ -4,6 +4,10 @@ import { createTokens } from '../auth';
 
 export const LoginUser = async ({ userName, password, res }) => {
     const responseValue = {
+        userName: '',
+        firstName: '',
+        lastName: '',
+        phnNumber: '',
         flag: false,
         errors: null,
         msg: null
@@ -19,6 +23,10 @@ export const LoginUser = async ({ userName, password, res }) => {
         res.status(200)
         responseValue.flag = true
         responseValue.msg = `Welcome Back ${userName}!`
+        responseValue.userName = user.userName;
+        responseValue.firstName = user.firstName;
+        responseValue.lastName = user.lastName;
+        responseValue.phnNumber = user.phnNumber;
         console.log(new Date().toLocaleTimeString(), "--> login success")
     } catch (err) {
          console.log("err: ",err)

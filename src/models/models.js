@@ -6,7 +6,7 @@ const userSchema = new Schema({
     password: { type: String, require: true },
     firstName: { type: String, require: true },
     lastName: { type: String, require: true },
-    phnNumber: { type: Number, default: -1 },
+    phnNumber: { type: String, default: "" },
     count: { type: Number, default: 0 }
 });
 

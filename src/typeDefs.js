@@ -1,12 +1,12 @@
 import { gql } from 'apollo-server-express';
 
-export const typeDefs  = gql`
+export const typeDefs = gql`
 
 type GetUserInfo {
     userName: String
     firstName: String
     lastName: String
-    phnNumber: Int
+    phnNumber: String
     error: String
 }
 type Detail {
@@ -33,8 +33,19 @@ type User {
 }
 
 type LoginUser {
+    userName: String!
+    firstName: String!
+    lastName: String
+    phnNumber: String
     flag: Boolean!
     msg: String
+    error: String
+}
+type UpdateUser {
+    userName: String!
+    firstName: String!
+    lastName: String
+    phnNumber: String
     error: String
 }
 
@@ -68,7 +79,8 @@ type Mutation {
     addUser(userName: String!, password: String!, firstName: String, lastName: String, phnNumber: Int): NewUser,
     loginUser(userName: String!, password: String!): LoginUser,
     invalidateToken: LogOut,
-    addReview(review: String!, productId: String!, stars: Int, reviewId: String): Reviews
+    addReview(review: String!, productId: String!, stars: Int, reviewId: String): Reviews,
+    updateUser(newPassword: String, currentPassword: String, firstName: String!, lastName: String, phnNumber: String): UpdateUser
 }
 `;
 

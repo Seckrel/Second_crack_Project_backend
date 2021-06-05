@@ -6,7 +6,8 @@ import { InvalidateToken } from './resolvers/invalidateToken';
 import { IsAuthenticated } from './resolvers/isAuthenticated';
 import { LoginUser } from './resolvers/loginUser';
 import { GetUser } from './resolvers/getUser';
-import { User, Product } from './models/models';
+import { UpdateUser } from './resolvers/UpdateUser';
+import { Product } from './models/models';
 
 export const resolvers = {
     Query: {
@@ -17,10 +18,7 @@ export const resolvers = {
     },
     Mutation: {
         addUser: async (_, args) => await AddUser(args),
-        loginUser: async (_, args, { res }) => {
-            console.log("here")
-            return await LoginUser({ ...args, res: res })
-        },
+        loginUser: async (_, args, { res }) => await LoginUser({ ...args, res: res }),
         invalidateToken: async (_, __, { req, res }) => await InvalidateToken({ req: req, res: res }),
         addReview: async (_, { review, productId, stars, reviewId }, { req }) => await AddReview({
             review: review,
@@ -28,6 +26,7 @@ export const resolvers = {
             stars: stars,
             reviewId: reviewId,
             req: req
-        })
+        }),
+        updateUser: async (_, args, { req }) => await UpdateUser(args, req),
     }
 };
