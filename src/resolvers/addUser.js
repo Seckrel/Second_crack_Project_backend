@@ -19,7 +19,7 @@ export const AddUser = async (args) => {
             password: hashed_password,
             firstName: firstName,
             lastName: lastName,
-            phnNumber: phnNumber
+            phnNumber: phnNumber?phnNumber:null
         });
         responseValue.msg = `Hello ${userName}! Welcome to 2nd Crack`;
         responseValue.flag = true

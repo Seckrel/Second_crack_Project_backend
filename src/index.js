@@ -40,7 +40,7 @@ const startServer = async () => {
                 req.userId = data.userId
                 return next()
             } catch (e) {
-                console.log("line 33 @ index.js:", e.message)
+                console.log(new Date().toLocaleTimeString(), e.message)
             }
             if (!refreshToken) return next();
             try {
@@ -51,7 +51,7 @@ const startServer = async () => {
                 res.cookie('access-token', tokens.accessToken, { maxAge: 60 * 1000, httpOnly: true });
                 req.userId = data.userId;
             } catch (e) {
-                console.log("line 46 @ index.js:", e.message)
+                console.log(new Date().toLocaleTimeString(), e.message)
                 return next();
             }
         }

@@ -76,7 +76,7 @@ type Query {
     isAuthenticated: Boolean!
 }
 type Mutation {
-    addUser(userName: String!, password: String!, firstName: String, lastName: String, phnNumber: Int): NewUser,
+    addUser(userName: String!, password: String!, firstName: String, lastName: String, phnNumber: String): NewUser,
     loginUser(userName: String!, password: String!): LoginUser,
     invalidateToken: LogOut,
     addReview(review: String!, productId: String!, stars: Int, reviewId: String): Reviews,
