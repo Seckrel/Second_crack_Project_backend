@@ -1,23 +1,25 @@
-import { gql } from 'apollo-server-express';
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
-
-type GetUserInfo {
+  type GetUserInfo {
     userName: String
     firstName: String
     lastName: String
     phnNumber: String
+    address: String
+    city: String
+    state: String
     error: String
-}
-type Detail {
+  }
+  type Detail {
     _id: ID!
     name: String
     price: String
     src: String
     _reviewId: [Reviews]
-}
+  }
 
-type Reviews {
+  type Reviews {
     _id: ID!
     review: String
     createdAt: String
@@ -26,13 +28,13 @@ type Reviews {
     _userId: User
     editable: Boolean
     error: String
-}
+  }
 
-type User {
-    userName: String,
-}
+  type User {
+    userName: String
+  }
 
-type LoginUser {
+  type LoginUser {
     userName: String!
     firstName: String!
     lastName: String
@@ -40,48 +42,86 @@ type LoginUser {
     flag: Boolean!
     msg: String
     error: String
-}
-type UpdateUser {
+  }
+  type UpdateUser {
     userName: String!
     firstName: String!
     lastName: String
     phnNumber: String
+    address: String
+    city: String
+    state: String
     error: String
-}
+  }
 
-type NewUser {
+  type NewUser {
     flag: Boolean!
     msg: String
     error: String
-}
+  }
 
-type ShopList {
+  type ShopList {
     id: ID!
     name: String
     price: String
     src: String
     quantity: Int
-}
+  }
 
-type LogOut {
+  type LogOut {
     flag: Boolean!
     error: String
-}
+  }
+
+  type PlaceOrder {
+    orderCompleted: Boolean!
+  }
 
 
-type Query {
+  type OrderConfirm {
+    orderCompleted: Boolean!
+    error: String
+  }
+
+  input PaymentProps{
+    productId: String
+    quantity: Int
+  }
+
+
+  type Query {
     getUsers: GetUserInfo
     getShopList: [ShopList]
     getProductDetail(productId: String!): Detail
+    placeOrder(productId: String!): PlaceOrder
     isAuthenticated: Boolean!
-}
-type Mutation {
-    addUser(userName: String!, password: String!, firstName: String, lastName: String, phnNumber: String): NewUser,
-    loginUser(userName: String!, password: String!): LoginUser,
-    invalidateToken: LogOut,
-    addReview(review: String!, productId: String!, stars: Int, reviewId: String): Reviews,
-    updateUser(newPassword: String, currentPassword: String, firstName: String!, lastName: String, phnNumber: String): UpdateUser
-}
+  }
+  type Mutation {
+    addUser(
+      userName: String!
+      password: String!
+      firstName: String
+      lastName: String
+      phnNumber: String
+    ): NewUser
+    loginUser(userName: String!, password: String!): LoginUser
+    invalidateToken: LogOut
+    addReview(
+      review: String!
+      productId: String!
+      stars: Int
+      reviewId: String
+    ): Reviews
+    updateUser(
+      newPassword: String
+      currentPassword: String
+      firstName: String!
+      lastName: String
+      phnNumber: String
+      address: String
+      city: String
+      state: String
+    ): UpdateUser
+    payment(orderList: [PaymentProps!]!): OrderConfirm
+  }
 `;
-
-

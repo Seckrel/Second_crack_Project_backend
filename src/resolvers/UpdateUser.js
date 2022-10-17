@@ -8,6 +8,9 @@ export const UpdateUser = async (args, req) => {
         firstName: "",
         lastName: "",
         phnNumber: "",
+        address: "",
+        city: "",
+        state: "",
         error: "",
     }
     try {
@@ -22,6 +25,9 @@ export const UpdateUser = async (args, req) => {
         user.firstName = args.firstName;
         user.lastName = args.lastName;
         user.phnNumber = args.phnNumber;
+        user.address = args.address;
+        user.state = args.state;
+        user.city = args.city
         await user.save();
     } catch (e) {
         console.log(e.message)
