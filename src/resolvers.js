@@ -8,7 +8,6 @@ import { LoginUser } from "./resolvers/loginUser";
 import { GetUser } from "./resolvers/getUser";
 import { UpdateUser } from "./resolvers/UpdateUser";
 import { Product } from "./models/models";
-import { PayOrder } from "./resolvers/payOrder";
 
 export const resolvers = {
   Query: {
@@ -34,7 +33,7 @@ export const resolvers = {
         req: req,
       }),
     updateUser: async (_, args, { req }) => await UpdateUser(args, req),
-    payment: async (_, args, { res, req }) =>
-      await PayOrder({ args: args, req: req, res: res }),
+    // payment: async (_, args, { res, req }) =>
+    //   await PayOrder({ args: args, req: req, res: res }),
   },
 };

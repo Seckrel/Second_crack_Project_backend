@@ -79,12 +79,13 @@ export const typeDefs = gql`
 
 
   type OrderConfirm {
-    orderCompleted: Boolean!
     error: String
+    forwardLink: String
+    id: String!
   }
 
   input PaymentProps{
-    productId: String
+    _productId: String
     quantity: Int
   }
 
@@ -122,6 +123,14 @@ export const typeDefs = gql`
       city: String
       state: String
     ): UpdateUser
-    payment(orderList: [PaymentProps!]!): OrderConfirm
+    payment(
+      firstName: String! 
+      lastName: String!
+      phnNumber: String!
+      address: String!
+      city: String!
+      state: String
+      orderList: [PaymentProps!]!
+      ): OrderConfirm
   }
 `;

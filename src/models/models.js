@@ -52,7 +52,7 @@ const orderSchema = new Schema({
     },
   ],
   orderDate: Date,
-  deliveryDate: Date,
+  deliveryDate: { type: Date, required: false },
 });
 
 const Orders = mongoose.model("orders", orderSchema);
